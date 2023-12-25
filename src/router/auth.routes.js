@@ -1,4 +1,5 @@
 export default [
+/*	
 	{
         path: '/login',
         name: 'login',
@@ -11,4 +12,5 @@ export default [
 		meta: { layout: "empty", noAuth: true },
         component: () => import('@/views/auth/Register.vue')
     },
+*/
 ]

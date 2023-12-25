@@ -15,7 +15,7 @@ const routes = [
     }
 ]
 
-const files = import.meta.globEager('./**/*routes.js');
+const files = import.meta.glob('./**/*routes.js', { eager: true });
 Object.entries(files).forEach(([, definition]) => {
 	routes.push(...definition.default);
 })

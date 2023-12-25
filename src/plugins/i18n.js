@@ -24,7 +24,7 @@ export default function (app) {
 
 function loadLocaleMessages () {
 	const messages = {};
-	const files = import.meta.globEager('../lang/**/*.js');
+	const files = import.meta.glob('../locales/**/*.js', { eager: true });
 
 	Object.entries(files).forEach(([path, definition]) => {
 		const locale = path.split('/')[1]
