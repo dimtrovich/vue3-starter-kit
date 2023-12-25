@@ -1,23 +1,40 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import runMiddlewares from '@/middlewares/handler/runner'
+import { ROUTES_EMPTY_LAYOUT } from '@/utils/constants';
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
+const routes = [
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: () => import('@/views/Home.vue')
     },
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      component: () => import('@/views/About.vue')
     }
-  ]
+]
+
+const files = import.meta.globEager('./**/*routes.js');
+Object.entries(files).forEach(([, definition]) => {
+	routes.push(...definition.default);
 })
+
+for (const route of routes) {
+	for (const key in route) {
+		const meta = route.meta || {}
+		if (!meta.layout) {
+			meta.layout = ! ROUTES_EMPTY_LAYOUT.includes(route.name || route.path) ? 'main' : 'empty';
+		}
+		route.meta = meta
+	}
+}
+
+const router = createRouter({
+  	history: createWebHistory(import.meta.env.BASE_URL),
+  	routes
+})
+
+router.beforeEach(runMiddlewares())
 
 export default router
