@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "description": "Le kit de base pour le développement de mes applications Vue3",
+  "author": {
+    "email": "devcode.dst@gmail.com",
+    "name": "Dimitri Sitchet Tomkeu"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
