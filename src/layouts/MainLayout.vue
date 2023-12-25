@@ -14,9 +14,9 @@
 <script>
 import { defineComponent } from 'vue';
 
-import Sidebar from './partials/Sidebar.vue';
-import AppHeader from './partials/Header.vue';
-import AppFooter from './partials/Footer.vue';
+import Sidebar from '../partials/Sidebar.vue';
+import AppHeader from '../partials/Header.vue';
+import AppFooter from '../partials/Footer.vue';
 
 
 export default defineComponent({
