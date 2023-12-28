@@ -1,4 +1,5 @@
 import { $storage } from "@/plugins/storage";
+import { AVAILABLE_LOCALES } from "./constants";
 
 /**
  * Recupere la langue a utilier par defaut
@@ -12,8 +13,6 @@ export function findLocale() {
 		lang = (window.navigator.language || window.navigator.userLanguage || window.navigator.browserLanguage).substr(0,2).toLowerCase();
 	}
 	
-	const AVAILABLE_LOCALES = import.meta.env.VITE_AVAILABLE_LOCALES || ['fr', 'en']
-
 	if (! AVAILABLE_LOCALES.includes(lang)) {
 		lang = import.meta.env.VITE_DEFAULT_LOCALE || 'fr'
 	}

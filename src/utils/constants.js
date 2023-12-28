@@ -18,6 +18,11 @@ export const APP_NAME = import.meta.env.VITE_APP_NAME || 'Vue3 Starter Kit';
 export const APP_ID = import.meta.env.VITE_APP_ID || APP_NAME.toLowerCase().replace(/\S+/, '');
 
 /**
+ * @var {string[]} AVAILABLE_LOCALES Liste des langues autorisées
+ */
+export const AVAILABLE_LOCALES = import.meta.env.VITE_AVAILABLE_LOCALES || ['fr', 'en']
+
+/**
  * @var {string[]} ROUTES_EMPTY_LAYOUT Routes qui utiliseront le layout 'empty'
  */
 export const ROUTES_EMPTY_LAYOUT = import.meta.env.VITE_ROUTES_EMPTY_LAYOUT || ['login', 'register', 'signin', 'signup', 'init']
