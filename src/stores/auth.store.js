@@ -5,8 +5,6 @@ import { $axios } from '@/plugins/axios';
 import router from '@/router';
 import { API_AUTH_USER_PATH, API_LOGIN_PATH, API_REGISTER_PATH } from '@/utils/constants';
 
-const route = router.currentRoute.value
-
 export const useAuthStore = defineStore({
     id: 'auth',
     state: () => ({
@@ -23,6 +21,8 @@ export const useAuthStore = defineStore({
             await $axios.post(API_REGISTER_PATH, data);    
 
 			if (callback) {
+				const route = router.currentRoute.value
+
 				callback({router, route});
 			}
         },
@@ -38,6 +38,7 @@ export const useAuthStore = defineStore({
             this.accessToken = result.access_token
             $storage.local.set('access_token', result.access_token)
                 
+			const route = router.currentRoute.value
             let redirect = route.query.redirect || 'home'
             if (['login'].includes(redirect)) {
                 redirect = 'home'

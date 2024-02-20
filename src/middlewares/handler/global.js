@@ -7,11 +7,11 @@ import checkGuest from "../guest"
 
 /**
  * 
- * @param {{to: any, from: any, next: function}} params 
+ * @param {{to: any, from: any}} params 
  * @param {array} middlewares 
  * @returns {array}
  */
-export default function({to, from, next}, middlewares) {
+export default function({to, from}, middlewares) {
 	if (to.meta.noAuth !== true) {
 		middlewares.unshift(checkAuth)	
 	} else {

@@ -35,6 +35,6 @@ const router = createRouter({
   	routes
 })
 
-router.beforeEach(runMiddlewares())
+router.beforeEach(runMiddlewares)
 
 export default router
