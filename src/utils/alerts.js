@@ -73,11 +73,11 @@ const toastError = (message, options = {}) => {
 	}, true))
 }
 
-const alert = {
+export const alert = {
     success : alertSuccess,
     error : alertError,
 }
-const toast = {
+export const toast = {
     success: toastSuccess,
     error: toastError,
 }
