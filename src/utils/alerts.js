@@ -15,7 +15,7 @@ const swalError = (options, toast = false) => ({
 
 
 const alertSuccess = (message, options = {}) => {
-	Swal.fire(swalSuccess({
+	return Swal.fire(swalSuccess({
 		...options,
 		text : message,
 		title: i18n.global.t('Succès'),
@@ -23,7 +23,7 @@ const alertSuccess = (message, options = {}) => {
 }
 
 const alertError = (message, options = {}) => {
-	Swal.fire(swalError({
+	return Swal.fire(swalError({
 		...options,
 		text: message,
 		title: i18n.global.t('Erreur'),
@@ -31,7 +31,7 @@ const alertError = (message, options = {}) => {
 }
 
 const confirm = (message, callback) => {
-	Swal.fire({
+	return Swal.fire({
         html: message,
         icon: "warning",
         buttonsStyling: true,
@@ -52,7 +52,7 @@ const confirm = (message, callback) => {
 }
 
 const toastSuccess = (message, options = {}) => {
-	Swal.fire(swalSuccess({
+	return Swal.fire(swalSuccess({
 		timer: 4000,
 		position         : "top-end",
 		...options,
@@ -63,7 +63,7 @@ const toastSuccess = (message, options = {}) => {
 }
 
 const toastError = (message, options = {}) => {
-	Swal.fire(swalError({
+	return Swal.fire(swalError({
 		timer: 4000,
 		position         : "top-end",
 		...options,
