@@ -13,7 +13,7 @@ import checkGuest from "../guest"
  */
 export default function({to, from}, middlewares) {
 	if (to.meta.noAuth !== true) {
-		middlewares.unshift(checkAuth)	
+		// middlewares.unshift(checkAuth)	
 	} else {
 		middlewares.unshift(checkGuest)	
 	}
