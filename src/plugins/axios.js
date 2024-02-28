@@ -1,7 +1,7 @@
 import axios from "axios";
 import { empty } from 'php-in-js/modules/types';
 import { $storage } from './storage';
-import { apiUrl } from '@/utils/constants';
+import { API_URL } from '@/utils/constants';
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -9,7 +9,7 @@ import { apiUrl } from '@/utils/constants';
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const config = {
-    baseURL: apiUrl(),
+    baseURL: API_URL,
     // timeout: 60 * 1000, // Timeout
     // withCredentials: true, // Check cross-site Access-Control
 };
