@@ -12,7 +12,7 @@ export const i18n = createI18n({
 
 export function changeLanguage(language) {
 	$storage.cookie.set('locale', language);
-	i18n.global.locale = language;
+	i18n.global.locale.value = language;
 }
 
 export default function (app) {
@@ -24,15 +24,20 @@ export default function (app) {
 
 function loadLocaleMessages () {
 	const messages = {};
-	const files = import.meta.glob('../locales/**/*.js', { eager: true });
+	const files = import.meta.globEager('../translations/**/*.json');
 
 	Object.entries(files).forEach(([path, definition]) => {
-		const locale = path.split('/')[1]
+		const parts     = path.split('/')
+		const locale    = parts[2]
+		const namespace = parts.at(-1).replace('.json', '')
 		if (!messages[locale]) {
 			messages[locale] = {}
 		}
+		if (!messages[locale][namespace]) {
+			messages[locale][namespace] = {}
+		}
 		const message = definition?.default
-		messages[locale] = { ...messages[locale], ...message }
+		messages[locale][namespace] = { ...messages[locale][namespace], ...message }
 	})
 
 	return messages
