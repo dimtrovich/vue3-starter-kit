@@ -1,15 +1,16 @@
-import { $storage } from '../plugins/storage';
+import { empty } from "php-in-js/modules/types";
+import { useAuthStore } from "@/stores";
 
 export default function({from, next}) {
-	const access_token = $storage.local.get('access_token')
-	if (access_token !== null && access_token !== '') {
+	if (! empty(useAuthStore().accessToken)) {
 		if (from.name) {
 			return next({ name: from.name })
 		} 
+		
 		if (from.path) {
 			return next(from.path)
-		}
-		
+		} 
+
 		return next({ name: 'home'})
 	}
 	

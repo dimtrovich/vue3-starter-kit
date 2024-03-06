@@ -1,6 +1,6 @@
 import axios from "axios";
 import { empty } from 'php-in-js/modules/types';
-import { $storage } from './storage';
+import { useAuthStore } from '@/stores/auth.store';
 import { API_URL } from '@/utils/constants';
 
 // Full config:  https://github.com/axios/axios#request-config
@@ -17,7 +17,7 @@ const _axios = axios.create(config);
 
 _axios.interceptors.request.use(
     function(config) {
-        const token = $storage.local.get('access_token');
+		const token = useAuthStore().accessToken
         if (! empty(token)) {
             config.headers['Authorization'] = `Bearer ${token}`
         }

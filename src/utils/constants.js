@@ -11,7 +11,7 @@ export const APP_NAME = import.meta.env.VITE_APP_NAME || 'Vue3 Starter Kit';
 /**
  * @var {string} APP_ID ID de l'application
  */
-export const APP_ID = import.meta.env.VITE_APP_ID || APP_NAME.toLowerCase().replace(/\S+/, '');
+export const APP_ID = (import.meta.env.VITE_APP_ID || APP_NAME.toLowerCase()).replace(/\s/g, '');
 
 /**
  * @var {string[]} AVAILABLE_LOCALES Liste des langues autorisées

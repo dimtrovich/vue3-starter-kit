@@ -1,11 +1,17 @@
-import { $storage } from '../plugins/storage';
+import { empty } from "php-in-js/modules/types";
+import { useAuthStore } from "@/stores";
 
-export default function({to, next}) {
-	const access_token = $storage.local.get('access_token')
-	if (access_token === null || access_token === '') {
-        $storage.local.remove('access_token', 'user')
+export default async function({to, next}) {
+	const auth = useAuthStore()
+	if (empty(auth.accessToken)) {
+        auth.user = null
+		auth.accessToken = null
 		
 		return next({ name: 'login', query: {redirect: to.name} })
+	}
+	
+	if (empty(auth.user)) {
+		await auth.getUser()
 	}
 	
 	return next()

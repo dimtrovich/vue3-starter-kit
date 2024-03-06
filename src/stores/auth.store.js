@@ -1,15 +1,14 @@
-import { defineStore } from 'pinia';
+import { defineStore, getActivePinia } from 'pinia';
 
-import { $storage } from '@/plugins/storage';
 import { $axios } from '@/plugins/axios';
 import router from '@/router';
-import { API_AUTH_USER_PATH, API_LOGIN_PATH, API_REGISTER_PATH } from '@/utils/constants';
+import { API_AUTH_USER_PATH, API_LOGIN_PATH, API_REGISTER_PATH, APP_ID } from '@/utils/constants';
 
-export const useAuthStore = defineStore({
-    id: 'auth',
+export const useAuthStore = defineStore(`${APP_ID}.auth`, {
+    persist: true,
     state: () => ({
-        user: $storage.local.get('user'),
-        accessToken: $storage.local.get('access_token'),
+        user: null,
+        accessToken: null,
     }),
     actions: {
 		/**
@@ -18,12 +17,12 @@ export const useAuthStore = defineStore({
 		 * @param {{[key: string]: any}} data donnees a soumettre
 		 */
         async register(data, callback) {
-            await $axios.post(API_REGISTER_PATH, data);    
+            const response = await $axios.post(API_REGISTER_PATH, data);    
 
 			if (callback) {
 				const route = router.currentRoute.value
 
-				callback({router, route});
+				callback({router, route, response });
 			}
         },
 
@@ -36,7 +35,6 @@ export const useAuthStore = defineStore({
             const { result } = await $axios.post(API_LOGIN_PATH, data);    
 
             this.accessToken = result.access_token
-            $storage.local.set('access_token', result.access_token)
                 
 			const route = router.currentRoute.value
             let redirect = route.query.redirect || 'home'
@@ -50,16 +48,17 @@ export const useAuthStore = defineStore({
 		 * Deconnexion
 		 */
         logout() {
-            this.user        = null
-            this.accessToken = null
-            $storage.local.remove('access_token', 'user')
+            getActivePinia()._s.forEach(store => store.$reset());
             router.push({ name: 'login' });
         },
+
+		/**
+		 * Récuperation des données de l'utilisateur actuellement connecté
+		 */
         async getUser() {
             const { result } = await $axios.get(API_AUTH_USER_PATH);    
 
             this.user = result.user
-            $storage.local.set('user', result.user)
         }
     }
 });
