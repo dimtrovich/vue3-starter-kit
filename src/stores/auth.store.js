@@ -41,7 +41,8 @@ export const useAuthStore = defineStore(`${APP_ID}.auth`, {
             if (['login'].includes(redirect)) {
                 redirect = 'home'
             }
-            router.push({ name: redirect })
+
+			window.location.href = router.resolve({ name: redirect }).href
         },
 
 		/**
@@ -49,7 +50,7 @@ export const useAuthStore = defineStore(`${APP_ID}.auth`, {
 		 */
         logout() {
             getActivePinia()._s.forEach(store => store.$reset());
-            router.push({ name: 'login' });
+			window.location.href = router.resolve({ name:'login' }).href
         },
 
 		/**
