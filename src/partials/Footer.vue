@@ -1,13 +1,11 @@
 <template>
-    <footer class="footer">
-		
-    </footer>
+	<footer class="footer"></footer>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-    name: "AppFooter",
+	name: 'AppFooter',
 })
 </script>

@@ -1,9 +1,5 @@
 <template>
-    <header class="app-header">
-		
-    </header>
+	<header class="app-header"></header>
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>

@@ -1,7 +1,5 @@
 <template>
-    <aside class="app-sidebar">
-		
-    </aside>
+	<aside class="app-sidebar"></aside>
 </template>
 
 <script setup>
@@ -15,7 +13,5 @@ onUpdated(() => {
 	initSidebarScrollbar()
 })
 
-function initSidebarScrollbar() {
-
-}
+function initSidebarScrollbar() {}
 </script>

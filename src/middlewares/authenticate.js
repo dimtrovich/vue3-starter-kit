@@ -1,18 +1,9 @@
-import { empty } from "php-in-js/modules/types";
-import { useAuthStore } from "@/stores";
+import { useAuthStore } from '@/stores/auth.store'
 
-export default async function({to, next}) {
-	const auth = useAuthStore()
-	if (empty(auth.accessToken)) {
-        auth.user = null
-		auth.accessToken = null
-		
-		return next({ name: 'login', query: {redirect: to.name} })
+export default async function({ to, next, router }) {
+	if (!useAuthStore().isLoggedIn()) {
+		return router.push({ name: 'login', query: { redirect: to.path } })
 	}
-	
-	if (empty(auth.user)) {
-		await auth.getUser()
-	}
-	
+
 	return next()
 }

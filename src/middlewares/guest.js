@@ -1,18 +1,16 @@
-import { empty } from "php-in-js/modules/types";
-import { useAuthStore } from "@/stores";
+import { useAuthStore } from '@/stores/auth.store'
 
-export default function({from, next}) {
-	if (! empty(useAuthStore().accessToken)) {
+export default function({ from, next }) {
+	if (useAuthStore().isLoggedIn()) {
 		if (from.name) {
 			return next({ name: from.name })
-		} 
-		
+		}
 		if (from.path) {
 			return next(from.path)
-		} 
+		}
 
-		return next({ name: 'home'})
+		return next({ name: 'home' })
 	}
-	
+
 	return next()
 }

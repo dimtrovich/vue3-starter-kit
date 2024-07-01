@@ -1,17 +1,15 @@
 <template>
-    <div>
-        <slot />
-    </div>
+	<div>
+		<slot />
+	</div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-    name: 'EmptyLayout'
+	name: 'EmptyLayout',
 })
 </script>
 
-<style>
-
-</style>
+<style></style>

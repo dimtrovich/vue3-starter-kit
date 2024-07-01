@@ -1,96 +1,131 @@
 import Swal from 'sweetalert2'
-import { i18n } from '@/plugins/i18n'
+
+import { $i18n } from '@/plugins/i18n'
 
 const swalSuccess = (options, toast = false) => ({
 	...options,
-	icon : "success",
-	toast: toast
+	icon: 'success',
+	toast,
 })
 
 const swalError = (options, toast = false) => ({
 	...options,
-	icon : "error",
-	toast: toast
+	icon: 'error',
+	toast,
 })
 
+const swalInfo = (options, toast = false) => ({
+	...options,
+	icon: 'info',
+	toast,
+})
 
 const alertSuccess = (message, options = {}) => {
-	return Swal.fire(swalSuccess({
-		...options,
-		text : message,
-		title: i18n.global.t('Succès'),
-	}))
+	return Swal.fire(
+		swalSuccess({
+			...options,
+			text: message,
+			title: $i18n.t('Succès'),
+		}),
+	)
 }
 
 const alertError = (message, options = {}) => {
-	return Swal.fire(swalError({
-		...options,
-		text: message,
-		title: i18n.global.t('Erreur'),
-	}))
+	return Swal.fire(
+		swalError({
+			...options,
+			text: message,
+			title: $i18n.t('Erreur'),
+		}),
+	)
 }
 
-const confirm = (message, callback) => {
-	return Swal.fire({
-        html: message,
-        icon: "warning",
-        buttonsStyling: true,
-        showCancelButton: true,
-        confirmButtonText: i18n.global.t('Oui'),
-        cancelButtonText: i18n.global.t('Non'),
-        customClass: {
-          	confirmButton: "btn btn-primary",
-          	cancelButton: "btn btn-danger",
-        },
-	}).then((result) => {
-        if (result.isConfirmed) {
-          	callback()
-        } else if (result.isDenied) {
-          Swal.close();
-        }
-	});
+const alertInfo = (message, options = {}) => {
+	return Swal.fire(
+		swalInfo({
+			...options,
+			text: message,
+			title: $i18n.t('Info'),
+		}),
+	)
 }
+
+export const confirm = (message, callback) => {
+	return Swal.fire({
+		buttonsStyling: true,
+		cancelButtonText: $i18n.t('Non'),
+		confirmButtonText: $i18n.t('Oui'),
+		customClass: {
+			cancelButton: 'btn btn-danger',
+			confirmButton: 'btn btn-primary',
+		},
+		html: message,
+		icon: 'warning',
+		showCancelButton: true,
+	}).then((result) => {
+		if (result.isConfirmed) {
+			callback()
+		} else if (result.isDenied) {
+			Swal.close()
+		}
+	})
+}
+
+export const $confirm = confirm
 
 const toastSuccess = (message, options = {}) => {
-	return Swal.fire(swalSuccess({
-		timer: 4000,
-		position         : "top-end",
-		...options,
-		text             : message,
-		title            : i18n.global.t('Succès'),
-		showConfirmButton: false,
-	}, true))
+	return Swal.fire(
+		swalSuccess(
+			{
+				position: 'top-end',
+				timer: 4000,
+				...options,
+				showConfirmButton: false,
+				text: message,
+				title: $i18n.t('Succès'),
+			},
+			true,
+		),
+	)
 }
 
 const toastError = (message, options = {}) => {
-	return Swal.fire(swalError({
-		timer: 4000,
-		position         : "top-end",
-		...options,
-		text             : message,
-		title            : i18n.global.t('Erreur'),
-		showConfirmButton: false,
-	}, true))
+	return Swal.fire(
+		swalError(
+			{
+				position: 'top-end',
+				timer: 4000,
+				...options,
+				showConfirmButton: false,
+				text: message,
+				title: $i18n.t('Erreur'),
+			},
+			true,
+		),
+	)
 }
 
 export const alert = {
-    success : alertSuccess,
-    error : alertError,
-}
-export const toast = {
-    success: toastSuccess,
-    error: toastError,
+	error: alertError,
+	info: alertInfo,
+	success: alertSuccess,
 }
 
+export const $alert = alert
+
+export const toast = {
+	error: toastError,
+	success: toastSuccess,
+}
+
+export const $toast = toast
 
 export const useAlert = () => ({
-	success: alertSuccess,
-	error: alertError,
+	...alert,
 	confirm,
 })
 
 export const useToast = () => ({
-	success: toastSuccess,
 	error: toastError,
+	success: toastSuccess,
 })
-

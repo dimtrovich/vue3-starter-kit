@@ -1,4 +1,4 @@
-export default function (app) {
+export default function(app) {
 	app.use({
 		install(app) {
 			app.config.globalProperties.$asset = (path) => {

@@ -1,10 +1,14 @@
+import { createPersistedState } from 'pinia-plugin-persistedstate'
 import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
-export default function (app) {
+import { APP_ID } from '@/utils/constants'
+
+export default function(app) {
 	const pinia = createPinia()
-	pinia.use(piniaPluginPersistedstate)
-	
+	pinia.use(createPersistedState({
+		key: (id) => `${APP_ID}.${id}`,
+	}))
+
 	app.use(pinia)
 
 	return app
