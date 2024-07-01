@@ -1,0 +1,8 @@
+export const STATUT_COMPLETE = 'complete'
+export const STATUT_INCOMPLETE = 'incomplete'
+export const STATUT_SUSPENDED = 'suspended'
+export const STATUT_ACTIVE = 'active'
+export const STATUT_INACTIVE = 'inactive'
+export const STATUT_PENDING = 'pending'
+export const STATUT_VALID = 'valid'
+export const STATUT_INVALID = 'invalid'
