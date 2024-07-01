@@ -1,9 +1,8 @@
 {
 	"name": "vue3-starter-kit",
 	"version": "0.0.0",
-	"private": true,
 	"type": "module",
-	"description": "Le kit de base pour le développement de mes applications Vue3",
+	"description": "Kit de base pour le développement d'applications Vue3",
 	"author": {
 		"email": "devcode.dst@gmail.com",
 		"name": "Dimitri Sitchet Tomkeu"
@@ -40,5 +39,8 @@
 		"unplugin-vue-components": "^0.27.2",
 		"vite": "^5.3.1",
 		"vite-plugin-vue-devtools": "^7.3.1"
+	},
+	"engines": {
+	  	"node": ">=18"
 	}
 }

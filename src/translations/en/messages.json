@@ -1,0 +1,5 @@
+{
+	"une_erreur_s_est_produite_lors_de_la_requete": "A server error occurred during request execution",
+	"votre_session_est_expiree_veuillez_vous_reconnecter": "Your session expired. Please login in again to use the application",
+	"vous_n_etes_pas_autoriser_a_effectuer_cette_action": "You are not allowed to perform this action"
+}

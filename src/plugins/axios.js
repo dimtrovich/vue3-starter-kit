@@ -1,14 +1,13 @@
 import axios from 'axios'
 
-import { useAuthStore } from '@/stores/auth.store'
-import { API_URL } from '@/utils/constants'
+import { isLoginRedirectable, mapErrors } from '@/utils/helpers'
+import { $alert } from '@/utils/alerts'
+import { $i18n } from './i18n'
 import { $storage } from './storage'
-import { isLoginRedirectable } from '@/utils/helpers'
+import { API_URL } from '@/utils/constants'
+import { useAuthStore } from '@/stores/auth.store'
 
-// Full config:  https://github.com/axios/axios#request-config
-// axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+export const statusCodesToHandle = [400, 401, 422]
 
 const config = {
 	baseURL: API_URL,
@@ -17,44 +16,9 @@ const config = {
 }
 const _axios = axios.create(config)
 
-_axios.interceptors.request.use(
-	function(config) {
-		const { accessToken } = useAuthStore()
-		if (accessToken !== null && accessToken !== undefined && accessToken !== '') {
-			config.headers['Authorization'] = `Bearer ${accessToken}`
-		}
+_axios.interceptors.request.use(requestInterceptor)
 
-		return config
-	},
-	function(error) {
-		return Promise.reject(error)
-	},
-)
-
-_axios.interceptors.response.use(
-	function(response) {
-		return response.data
-	},
-	function(error) {
-		const response = error.response || null
-
-		if (response == null) {
-			return Promise.reject(error)
-		}
-		if (response.status === 498 && isLoginRedirectable()) {
-			$storage.local.set('session_expire', true)
-
-			return useAuthStore().logout()
-		}
-
-		const data = response.data || null
-		if (data == null) {
-			return Promise.reject(response)
-		}
-
-		return Promise.reject(data)
-	},
-)
+_axios.interceptors.response.use(successInterceptor, errorInterceptor)
 
 export default function(app) {
 	app.use({
@@ -67,3 +31,82 @@ export default function(app) {
 }
 
 export const $axios = _axios
+
+/**
+ * Intercepteur de requete axios 
+ */
+function requestInterceptor(config) {
+	if (!config.headers) {
+		config.headers = {}
+	}
+	
+	config.headers.Accept = 'application/vnd.api+json'
+
+	const { accessToken } = useAuthStore()
+	
+	if (!config.headers.Authorization && accessToken !== null && accessToken !== undefined && accessToken !== '') {
+		config.headers.Authorization = `Bearer ${accessToken}`
+	}
+  
+	return config
+}
+
+/**
+ * Intercepteur de reponse ok 
+ */
+function successInterceptor(response) {
+	return response.data
+}
+
+/**
+ * Intercepteur de reponse d'echec 
+ */
+async function errorInterceptor(error) {
+	// Happens for cancelled requests using axios CancelTokenSource
+	if (!error.response) {
+	  	return Promise.reject(error)
+	}
+  
+	// eslint-disable-next-line prefer-destructuring
+	const { status } = error.response
+	let errors = ''
+  
+	if (statusCodesToHandle.includes(status)) {
+	  	errors = mapErrors(error.response.data)
+	  	if (errors === 'Unauthenticated.') {
+			errors = $i18n.t('messages.votre_session_est_expiree_veuillez_vous_reconnecter')
+	  	}
+
+		$alert.error(errors)
+		error.handled = true
+	}
+  
+	if (status === 403) { // Forbidden
+	  	errors = $i18n.t('messages.vous_n_etes_pas_autoriser_a_effectuer_cette_action')
+	  	$alert.error(errors)
+		error.handled = true
+	}
+  
+	if (status === 500) { // InternalServerError
+	  	errors = $i18n.t('messages.une_erreur_s_est_produite_lors_de_la_requete')
+		$alert.error(errors)
+		error.handled = true
+	}
+  
+	if (status === 498) { // Token expired
+		errors = $i18n.t('messages.votre_session_est_expiree_veuillez_vous_reconnecter')
+		$alert.error(errors)
+		error.handled = true
+	}
+
+	error.errors = errors
+	error.status = status
+  
+	if ([401, 498].includes(status) && isLoginRedirectable()) {
+		$storage.local.set('session_expire', true)
+
+		return useAuthStore().logout()
+	}
+
+	return Promise.reject(error)
+}

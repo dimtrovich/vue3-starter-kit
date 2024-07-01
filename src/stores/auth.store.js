@@ -1,9 +1,11 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable sort-keys */
 import { defineStore, getActivePinia } from 'pinia'
 
+import { API_AUTH_USER_PATH, API_LOGIN_PATH, API_REGISTER_PATH, INACTIVE_SESSION_TIMEOUT } from '@/utils/constants'
 import { $axios } from '@/plugins/axios'
 import { $days } from '@/plugins/dayjs'
 import { $storage } from '@/plugins/storage'
-import { API_AUTH_USER_PATH, API_LOGIN_PATH, API_REGISTER_PATH } from '@/utils/constants'
 import { resolveRoutePath } from '@/utils/helpers'
 import router from '@/router'
 
@@ -39,7 +41,7 @@ export const useAuthStore = defineStore('auth', {
 			const { result } = await $axios.post(API_LOGIN_PATH, data)
 
 			this.accessToken = result.access_token
-			this.expireAt = $days().add(SESSION_DURATION, 'minutes')
+			this.expireAt = $days().add(INACTIVE_SESSION_TIMEOUT, 'minutes')
 
 			const route = router.currentRoute.value
 
