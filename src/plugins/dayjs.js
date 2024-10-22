@@ -7,8 +7,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/fr'
 import 'dayjs/locale/en'
 
-import { $i18n } from './i18n'
 import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from '@/utils/constants'
+import { $i18n } from './i18n'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(relativeTime)
@@ -25,9 +25,6 @@ export const $days = dayjs
 export default function(app) {
 	app.use({
 		install(app) {
-			if (!app.hasOwnProperty('$dayjs')) {
-				app.$dayjs = dayjs
-			}
 			app.config.globalProperties.$dayjs = dayjs
 			window.$dayjs = dayjs
 		},

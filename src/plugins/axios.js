@@ -1,10 +1,11 @@
+import { is_array, is_object, is_string } from 'php-in-js/modules/types'
 import axios from 'axios'
 
-import { isLoginRedirectable, mapErrors } from '@/utils/helpers'
 import { $alert } from '@/utils/alerts'
 import { $i18n } from './i18n'
 import { $storage } from './storage'
 import { API_URL } from '@/utils/constants'
+import { isLoginRedirectable } from '@/utils/helpers'
 import { useAuthStore } from '@/stores/auth.store'
 
 export const statusCodesToHandle = [400, 401, 422]
@@ -61,24 +62,30 @@ function successInterceptor(response) {
 /**
  * Intercepteur de reponse d'echec 
  */
-async function errorInterceptor(error) {
-	// Happens for cancelled requests using axios CancelTokenSource
+async function errorInterceptor(error) {	
+	// Se produit pour les requetes annulées utilisant axios CancelTokenSource
 	if (!error.response) {
 	  	return Promise.reject(error)
 	}
   
-	// eslint-disable-next-line prefer-destructuring
-	const { status } = error.response
+    const { response } = error
+	const { status } = response
+
 	let errors = ''
   
+  	if (response.data.code) {
+	    // eslint-disable-next-line prefer-destructuring
+	    error.code = response.data.code
+	}
+
 	if (statusCodesToHandle.includes(status)) {
-	  	errors = mapErrors(error.response.data)
+	  	errors = mapErrors(response.data)
 	  	if (errors === 'Unauthenticated.') {
 			errors = $i18n.t('messages.votre_session_est_expiree_veuillez_vous_reconnecter')
+			error.handled = true
 	  	}
 
-		$alert.error(errors)
-		error.handled = true
+		// $alert.error(errors)
 	}
   
 	if (status === 403) { // Forbidden
@@ -102,6 +109,13 @@ async function errorInterceptor(error) {
 	error.errors = errors
 	error.status = status
   
+	if (is_string(errors)) {
+		error.message = errors
+		delete error.errors
+	} else {
+		delete error.message
+	}
+	
 	if ([401, 498].includes(status) && isLoginRedirectable()) {
 		$storage.local.set('session_expire', true)
 
@@ -109,4 +123,37 @@ async function errorInterceptor(error) {
 	}
 
 	return Promise.reject(error)
+}
+
+/**
+ * 
+ * @param {any} data 
+ * @returns {any} 
+ */
+function mapErrors(data) {
+	if ((!data.errors && data.message) || data.messages) {
+	  return data.message || data.messages[0]
+	}
+	
+	if (is_array(data.errors)) {
+	  const hasStringErrors = typeof data.errors[0] === 'string'
+  
+		if (hasStringErrors) {
+			return data.errors[0]
+		}
+	}
+
+	if (is_object(data.errors)) {
+		const result = {}
+		for (const key in data.errors) {
+			// eslint-disable-next-line prefer-destructuring
+			const value = data.errors[key]
+			// eslint-disable-next-line @stylistic/js/quotes
+			result[key] = (Array.isArray(value) ? value : [value]).join("\n")
+		}
+
+		return result
+	}
+		
+	return data.errors
 }
