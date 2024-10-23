@@ -34,6 +34,13 @@ export const useAuthStore = defineStore('auth', {
 			}
 			return this.lastConnected[key]
 		},
+
+		/**
+		 * Incremente la duree de vie de la session
+		 */
+		incrementTimeout(timeout) {
+			this.expireAt = $days().add(timeout || INACTIVE_SESSION_TIMEOUT, 'minutes').format()
+		},
 		
 		/**
 		 * Inscription
@@ -59,8 +66,7 @@ export const useAuthStore = defineStore('auth', {
 			const { result } = await $axios.post(API_LOGIN_PATH, data)
 
 			this.accessToken = result.access_token
-			this.expireAt = $days().add(INACTIVE_SESSION_TIMEOUT, 'minutes')
-
+			
 			const route = router.currentRoute.value
 
 			let redirect = route.query.redirect || '/'
@@ -69,6 +75,7 @@ export const useAuthStore = defineStore('auth', {
 			}
 
 			await this.getUser()
+			this.incrementTimeout(INACTIVE_SESSION_TIMEOUT)
 
 			window.location.href = resolveRoutePath(redirect)
 		},
