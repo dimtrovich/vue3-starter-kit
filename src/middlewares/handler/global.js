@@ -2,6 +2,7 @@
  * Enregistre les middlewares qui s'executerons globalement
  */
 
+import autoLogout from '../auto-logout'
 import checkAuth from '../authenticate'
 import checkGuest from '../guest'
 
@@ -13,7 +14,7 @@ import checkGuest from '../guest'
  */
 export default function({ to }, middlewares) {
 	if (to.meta.noAuth !== true) {
-		middlewares.unshift(checkAuth)
+		middlewares.unshift(checkAuth, autoLogout)
 	} else {
 		middlewares.unshift(checkGuest)
 	}

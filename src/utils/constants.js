@@ -44,6 +44,6 @@ export const API_REGISTER_PATH = import.meta.env.VITE_API_REGISTER_PATH || 'auth
 export const API_AUTH_USER_PATH = import.meta.env.VITE_API_AUTH_USER_PATH || 'auth/user'
 
 /**
- * @var {Number} INACTIVE_SESSION_TIMEOUT Nombre de minutes d'inactivite de l'utilisateur avant la deconnexion automatique
+ * @var {number} - Nombre de minutes d'inactivite de l'utilisateur avant la deconnexion automatique
  */
-export const INACTIVE_SESSION_TIMEOUT = import.meta.env.VITE_SESSION_DURATION || 5 // 5 minutes
+export const INACTIVE_SESSION_TIMEOUT = import.meta.env.VITE_INACTIVE_SESSION_TIMEOUT || 5 // 5 minutes

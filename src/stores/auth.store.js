@@ -14,9 +14,27 @@ export const useAuthStore = defineStore('auth', {
 	state: () => ({
 		accessToken: null,
 		expireAt: null,
+		lastConnected: $storage.local.get('last-connected-email'),
 		user: null,
 	}),
 	actions: {
+		/**
+		 * Defini les informations du dernier utilisateur connecter
+		 */
+		setLastConnected(email) {
+			this.lastConnected = { email, date: $days().toISOString() }
+			$storage.local.set('last-connected-email', this.lastConnected)
+		},
+		/**
+		 * Recupere les informations du dernier utilisateur connecter
+		 */
+		getLastConnected(key = null) {
+			if (this.lastConnected === null || key === null) {
+				return this.lastConnected
+			}
+			return this.lastConnected[key]
+		},
+		
 		/**
 		 * Inscription
 		 *
@@ -61,7 +79,11 @@ export const useAuthStore = defineStore('auth', {
 		 * @param {string} [to='login'] Page où sera redirigé l'utilisateur après la deconnexion
 		 */
 		logout(to = 'login', redirect = null) {
-			getActivePinia()._s.forEach((store) => store.$reset())
+			if (this.user) {
+				this.setLastConnected(this.user.email)
+			}
+
+			getActivePinia()._s.forEach(store => store.$reset())
 
 			if (!redirect || $storage.local.get('session_expire')) {
 				redirect = router.currentRoute.value.path
