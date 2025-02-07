@@ -8,7 +8,7 @@ import { API_URL } from '@/utils/constants'
 import { isLoginRedirectable } from '@/utils/helpers'
 import { useAuthStore } from '@/stores/auth.store'
 
-export const statusCodesToHandle = [400, 401, 422]
+export const statusCodesToHandle = [400, 401, 404, 406, 409, 422, 428]
 
 const config = {
 	baseURL: API_URL,
