@@ -26,7 +26,12 @@ export const DEFAULT_LOCALE = import.meta.env.VITE_DEFAULT_LOCALE || 'fr'
 /**
  * @var {string[]} ROUTES_EMPTY_LAYOUT Routes qui utiliseront le layout 'empty'
  */
-export const ROUTES_EMPTY_LAYOUT = import.meta.env.VITE_ROUTES_EMPTY_LAYOUT || ['login', 'register', 'signin', 'signup', 'init']
+export const ROUTES_EMPTY_LAYOUT = import.meta.env.VITE_ROUTES_EMPTY_LAYOUT || ['login', 'register', 'signin', 'signup', 'init', 'reset-password']
+
+/**
+ * @var {string[]} LOGIN_NOT_REDIRECTABLE Chemin d'acces des pages qui ne peuvent pas etre redirigée vers la page de login si jamais il y'a un soucis d'authentification (HTTP 401 / 498). Voir /src/plugins/axios.js#L119
+ */
+export const LOGIN_NOT_REDIRECTABLE = import.meta.env.VITE_LOGIN_NOT_REDIRECTABLE || ['login', 'register', 'signin', 'signup', 'init', 'reset-password']
 
 /**
  * @var {string} API_LOGIN_PATH Chemin du login vers l'api

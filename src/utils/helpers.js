@@ -1,7 +1,7 @@
 import { is_string } from 'php-in-js/modules/types'
 import { trim } from 'php-in-js/modules/string'
 
-import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from './constants'
+import { AVAILABLE_LOCALES, DEFAULT_LOCALE, LOGIN_NOT_REDIRECTABLE } from './constants'
 import { $storage } from '@/plugins/storage'
 import router from '@/router'
 
@@ -55,10 +55,16 @@ export function resolveRoutePath(to) {
 }
 
 /**
- * Verifie si l'url courrante peut etre regirigée vers le login ou pas
+ * Verifie si l'url courrante peut etre redirigée vers le login ou pas
  */
 export function isLoginRedirectable() {
-	const currentUrl = trim(window.location.href, '/')
+	const currentUrl     = trim(window.location.pathname, '/')
 
-	return false === currentUrl.includes('login')
+	for (const path of LOGIN_NOT_REDIRECTABLE) {
+		if (currentUrl.startsWith(path)) {
+			return false
+		}
+	}
+
+	return true
 }
