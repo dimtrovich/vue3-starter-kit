@@ -7,15 +7,13 @@
         no-close-on-backdrop
         no-close-on-esc
         :scrollable="scrollable"
-        :hide-footer="noFooter"
-        :hide-header="noHeader"
-        @ok="handleOk"
-        @hide.prevent
+        :no-footer="noFooter"
+        :no-header="noHeader"
+        @ok.prevent="handleOk"
         @close="handleHidden"
     >
         <template #title>
-            <slot v-if="empty(title)" name="title" />
-            <div v-else v-html="title"></div>
+            <slot name="title">{{ title }}</slot>
         </template>
         <template #footer="{ ok, close }">
             <slot name="footer" v-bind="slotScope">
@@ -43,28 +41,28 @@ const modelValue = defineModel({ type: Boolean })
 const emit = defineEmits(['close', 'ok', 'update:modelValue'])
 
 const props = defineProps({
-    buttonSize: { default: 'sm', type: String },
-    cancelOnly: { default: false, type: Boolean },
-    cancelTitle: { default: null, type: String },
+    buttonSize   : { default: 'sm', type: String },
+    cancelOnly   : { default: false, type: Boolean },
+    cancelTitle  : { default: null, type: String },
     cancelVariant: { default: 'secondary', type: String },
-    disabled: { default: false, type: Boolean },
-    fullscreen: { default: false, type: Boolean },
-    id: { required: true, type: String },
-    noFooter: { default: false, type: Boolean },
-    noHeader: { default: false, type: Boolean },
-    okOnly: { default: false, type: Boolean },
-    okTitle: { default: null, type: String },
-    okVariant: { default: 'primary', type: String },
-    scrollable: { default: false, type: Boolean },
-    size: { default: 'md', type: String },
-    submitted: { default: false, type: Boolean },
-    title: { default: '', type: String },
+    disabled     : { default: false, type: Boolean },
+    fullscreen   : { default: false, type: Boolean },
+    id           : { required: true, type: String },
+    noFooter     : { default: false, type: Boolean },
+    noHeader     : { default: false, type: Boolean },
+    okOnly       : { default: false, type: Boolean },
+    okTitle      : { default: null, type: String },
+    okVariant    : { default: 'primary', type: String },
+    scrollable   : { default: false, type: Boolean },
+    size         : { default: 'md', type: String },
+    submitted    : { default: false, type: Boolean },
+    title        : { default: '', type: String },
 })
 
 const modal = useModal(props.id)
 
 const titleCancel = ref('')
-const titleOk = ref('')
+const titleOk     = ref('')
 
 const slotScope = computed(() => ({
     close: () => modal.hide(),
