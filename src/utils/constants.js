@@ -1,7 +1,7 @@
 /**
  * @var {string} API_URL URL de base de l'API
  */
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost/api'
+export const API_URL = import.meta.env.DEV ? (import.meta.env.VITE_API_URL || 'http://localhost/api') : (import.meta.env.VITE_API_PROD_URL || (import.meta.env.VITE_API_URL || 'http://localhost/api'))
 
 /**
  * @var {string} APP_NAME Nom de l'application
