@@ -16,7 +16,7 @@ export const APP_ID = (import.meta.env.VITE_APP_ID || APP_NAME.toLowerCase()).re
 /**
  * @var {string[]} AVAILABLE_LOCALES Liste des langues autorisées
  */
-export const AVAILABLE_LOCALES = import.meta.env.VITE_AVAILABLE_LOCALES || ['fr', 'en']
+export const AVAILABLE_LOCALES = (import.meta.env.VITE_AVAILABLE_LOCALES || 'fr,en').split(',')
 
 /**
  * @var {string[]} DEFAULT_LOCALE Langue par défaut
