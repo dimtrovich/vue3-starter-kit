@@ -4,7 +4,7 @@ import { defineStore, getActivePinia } from 'pinia'
 
 import { API_AUTH_USER_PATH, API_LOGIN_PATH, API_REGISTER_PATH, INACTIVE_SESSION_TIMEOUT } from '@/utils/constants'
 import { $axios } from '@/plugins/axios'
-import { $days } from '@/plugins/dayjs'
+import { $dayjs } from '@/plugins/dayjs'
 import { $storage } from '@/plugins/storage'
 import { resolveRoutePath } from '@/utils/helpers'
 import router from '@/router'
@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', {
 		 * Defini les informations du dernier utilisateur connecter
 		 */
 		setLastConnected(email) {
-			this.lastConnected = { email, date: $days().toISOString() }
+			this.lastConnected = { email, date: $dayjs().toISOString() }
 			$storage.local.set('last-connected-email', this.lastConnected)
 		},
 		/**
@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', {
 		 * Incremente la duree de vie de la session
 		 */
 		incrementTimeout(timeout) {
-			this.expireAt = $days().add(timeout || INACTIVE_SESSION_TIMEOUT, 'minutes').format()
+			this.expireAt = $dayjs().add(timeout || INACTIVE_SESSION_TIMEOUT, 'minutes').format()
 		},
 		
 		/**

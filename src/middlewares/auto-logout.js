@@ -4,7 +4,7 @@
 
 import { empty } from 'php-in-js/modules/types'
 
-import { $days } from '@/plugins/dayjs'
+import { $dayjs } from '@/plugins/dayjs'
 import { useAuthStore } from '@/stores/auth.store'
 
 export default function({ next }) {
@@ -12,7 +12,7 @@ export default function({ next }) {
 	
 	const { expireAt } = authStore
 
-	if (empty(expireAt) || $days().isAfter(expireAt, 'minutes')) {
+	if (empty(expireAt) || $dayjs().isAfter(expireAt, 'minutes')) {
 		authStore.logout()
 		
 		return next({ name: 'login' })

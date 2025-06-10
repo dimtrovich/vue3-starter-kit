@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
@@ -11,8 +12,9 @@ import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from '@/utils/constants'
 import { $i18n } from './i18n'
 
 dayjs.extend(customParseFormat)
-dayjs.extend(relativeTime)
+dayjs.extend(duration)
 dayjs.extend(isBetween)
+dayjs.extend(relativeTime)
 
 let { locale } = $i18n
 if (!AVAILABLE_LOCALES.includes(locale)) {
@@ -20,7 +22,7 @@ if (!AVAILABLE_LOCALES.includes(locale)) {
 }
 dayjs.locale(locale)
 
-export const $days = dayjs
+export const $dayjs = dayjs
 
 export default function(app) {
 	app.use({
